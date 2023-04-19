@@ -5,6 +5,10 @@ import '../providers/products.dart';
 import './product_item.dart';
 
 class ProductGrid extends StatelessWidget {
+  final bool showFavs;
+
+  ProductGrid(this.showFavs);
+
   // const ProductGrid({
   //   super.key,
   //   required this.loadedProducts,
@@ -15,7 +19,7 @@ class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
-    final products = productsData.items;
+    final products = showFavs ? productsData.favItems : productsData.items;
 
     return GridView.builder(
       padding: const EdgeInsets.all(10),
@@ -29,10 +33,10 @@ class ProductGrid extends StatelessWidget {
         value: products[index],
         //use .value when provider is used on a list or grid where an existing object is reused
         child: ProductItem(
-          // products[index].id,
-          // products[index].title,
-          // products[index].imageUrl,
-        ),
+            // products[index].id,
+            // products[index].title,
+            // products[index].imageUrl,
+            ),
       ),
       itemCount: products.length,
     );
