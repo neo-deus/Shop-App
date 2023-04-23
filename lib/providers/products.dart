@@ -47,7 +47,7 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  List<Product> get favItems{
+  List<Product> get favItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 
@@ -65,8 +65,16 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct() {
-    //_items.add(new Product);
+  void addProduct(Product product) {
+    final newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    );
+    _items.add(newProduct);
+    //_items.insert(0,newProduct);  //to add at the start of the list
     notifyListeners();
   }
 }
