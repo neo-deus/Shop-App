@@ -68,7 +68,7 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  Future<void> addProduct(Product product) {
+  /* Future<void> addProduct(Product product) {
     var url = Uri.https('first-firebase-app-bffe9-default-rtdb.firebaseio.com',
         '/products.json');
     return http
@@ -95,7 +95,42 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       //_items.insert(0,newProduct);  //to add at the start of the list
       notifyListeners();
+    }).catchError((error) {
+      // print(error);
+      throw error;
     });
+  } */
+
+  Future<void> addProduct(Product product) async {
+    var url = Uri.https('first-firebase-app-bffe9-default-rtdb.firebaseio.com',
+        '/products.json');
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'price': product.price,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        }),
+      );
+      //print(response);
+      //print(json.decode(response.body));
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+      _items.add(newProduct);
+      //_items.insert(0,newProduct);  //to add at the start of the list
+      notifyListeners();
+    } catch (error) {
+      //print(error);
+      throw error;
+    }
   }
 
   void updateProduct(String id, Product product) {
